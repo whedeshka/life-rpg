@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Прокачай свою жизнь",
+    "slug": "life-rpg",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#0B1020"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.whedeshka.liferpg"
+    },
+    "android": {
+      "package": "com.whedeshka.liferpg",
+      "adaptiveIcon": {
+        "backgroundColor": "#0B1020"
+      }
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
