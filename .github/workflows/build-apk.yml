@@ -1,0 +1,54 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build debug APK (React Native CLI)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.4
+          cache: npm
+          cache-dependency-path: package.json
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Generate bare React Native Android project
+        run: |
+          npx @react-native-community/cli@15 init LifeRPG --version 0.81.5 --skip-install --skip-git-init
+          cp App.tsx LifeRPG/App.tsx
+          cp tsconfig.json LifeRPG/tsconfig.json
+
+      - name: Install app dependencies
+        working-directory: LifeRPG
+        run: |
+          npm install
+          npm install @react-native-async-storage/async-storage@2.2.0 @supabase/supabase-js
+
+      - name: Build APK
+        working-directory: LifeRPG
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: life-rpg-debug-apk
+          path: LifeRPG/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
